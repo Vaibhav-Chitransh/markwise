@@ -59,7 +59,7 @@ const bookmarks = [
 
 1. POST `/signup` - Register a user
 2. POST `/signin` - Login and return JWT
-3. POST `/bookmark` - Bookmark a page
+3. POST `/bookmark` - Create new bookmark
 4. GET `/bookmarks` - Get all bookmarks for that user
 5. PUT `/bookmark/:id` - Update bookmark with id (Can updated title, description, link)
 6. DELETE `/bookmark/:id` - Delete the bookmark having id provided in path params

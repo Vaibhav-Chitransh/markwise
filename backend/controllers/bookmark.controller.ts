@@ -1,0 +1,27 @@
+import type { Request, Response } from "express";
+import { CreateBookmarkSchema } from "../validators/bookmark.validator";
+import { prisma } from "../lib/prisma";
+
+export const CreateBookmark = async (req : Request, res : Response) => {
+    const validationResult = CreateBookmarkSchema.safeParse(req.body);
+    if(!validationResult.success) return res.status(400).json({message: "Invalid Inputs", details: validationResult.error.format()});
+
+    const {title, description, link} = validationResult.data;
+    const userId = (req as any).userId;
+
+    const getLogo = await fetch(`https://www.google.com/s2/favicons?domain=${link}&sz=128`);
+    const logo = getLogo?.url || "";
+
+    const newBookmark = await prisma.bookmark.create({
+        data: {
+            title,
+            description,
+            logo,
+            link,
+            userId
+        },
+        select: {id: true}
+    })
+
+    return res.status(200).json({message: "New Bookmark added", id: newBookmark.id});
+}
