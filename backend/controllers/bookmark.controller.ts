@@ -25,3 +25,10 @@ export const CreateBookmark = async (req : Request, res : Response) => {
 
     return res.status(200).json({message: "New Bookmark added", id: newBookmark.id});
 }
+
+export const GetAllBookmarks = async (req : Request, res : Response) => {
+    const userId = (req as any).userId;
+    const bookmarks = await prisma.bookmark.findMany({where: {userId: userId}});
+
+    return res.status(200).json({bookmarks});
+}
