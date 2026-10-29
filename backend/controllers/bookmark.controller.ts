@@ -32,3 +32,11 @@ export const GetAllBookmarks = async (req : Request, res : Response) => {
 
     return res.status(200).json({bookmarks});
 }
+
+export const GetBookmarkGivenId = async (req : Request, res : Response) => {
+    const userId = (req as any).userId;
+    const bookmarkId = parseInt((req as any).params.id);
+    const bookmark = await prisma.bookmark.findUnique({where: {id: bookmarkId, userId: userId}});
+
+    return res.status(200).json({bookmark});
+}
