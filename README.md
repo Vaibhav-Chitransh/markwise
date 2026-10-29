@@ -54,3 +54,14 @@ const bookmarks = [
     }
 ]
 ```
+
+## API Endpoints
+
+1. POST `/signup` - Register a user
+2. POST `/signin` - Login and return JWT
+3. POST `/bookmark` - Bookmark a page
+4. GET `/bookmarks` - Get all bookmarks for that user
+5. PUT `/bookmark/:id` - Update bookmark with id (Can updated title, description, link)
+6. DELETE `/bookmark/:id` - Delete the bookmark having id provided in path params
+7. GET `/bookmark/:id` - Get bookmark with given id
+8. PUT `/incrementCount/:id` - Increment visitedCount of bookmark with given id
