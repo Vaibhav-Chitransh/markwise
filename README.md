@@ -65,3 +65,5 @@ const bookmarks = [
 6. DELETE `/bookmark/:id` - Delete the bookmark having id provided in path params
 7. GET `/bookmark/:id` - Get bookmark with given id
 8. PUT `/incrementCount/:id` - Increment visitedCount of bookmark with given id
+9. POST `/signout` - Logout a user
+10. GET `/bookmarks?search={searchValue}` - Returns all bookmarks whose title or description contains searchValue
