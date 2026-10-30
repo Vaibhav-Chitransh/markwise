@@ -69,3 +69,16 @@ export const DeleteBookmark = async (req : Request, res : Response) => {
     const deletedBookmark = await prisma.bookmark.delete({where: {userId: userId, id: bookmarkId}});
     return res.status(200).json({message: "Bookmark deleted successfully", bookmark: deletedBookmark});
 }
+
+export const IncrementVisitedCount = async (req : Request, res : Response) => {
+    const userId = (req as any).userId;
+    const bookmarkId = parseInt((req as any).params.id);
+
+    const bookmark = await prisma.bookmark.findUnique({where: {userId: userId, id: bookmarkId}});
+    if(!bookmark) return res.status(404).json({message: "Bookmark not found or you are not authorized to udpate the visited count"});
+
+    let currentVisitedCount = bookmark.visitedCount;
+
+    const updateVisitedCount = await prisma.bookmark.update({where: {userId: userId, id: bookmarkId}, data: {visitedCount: currentVisitedCount + 1}});
+    return res.status(200).json({message: "Incremented Visited Count", bookmark: updateVisitedCount});
+}
