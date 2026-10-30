@@ -1,9 +1,9 @@
 import type { Request, Response } from "express";
-import { CreateBookmarkSchema } from "../validators/bookmark.validator";
 import { prisma } from "../lib/prisma";
+import BookmarkSchema from "../validators/bookmark.validator";
 
 export const CreateBookmark = async (req : Request, res : Response) => {
-    const validationResult = CreateBookmarkSchema.safeParse(req.body);
+    const validationResult = BookmarkSchema.safeParse(req.body);
     if(!validationResult.success) return res.status(400).json({message: "Invalid Inputs", details: validationResult.error.format()});
 
     const {title, description, link} = validationResult.data;
@@ -39,4 +39,20 @@ export const GetBookmarkGivenId = async (req : Request, res : Response) => {
     const bookmark = await prisma.bookmark.findUnique({where: {id: bookmarkId, userId: userId}});
 
     return res.status(200).json({bookmark});
+}
+
+export const UpdateBookmark = async (req : Request, res : Response) => {
+    const validationResult = BookmarkSchema.safeParse(req.body);
+    if(!validationResult.success) return res.status(400).json({message: "Invalid Inputs", details: validationResult.error.format()});
+
+    const {title, description, link} = validationResult.data;
+    const userId = (req as any).userId;
+    const bookmarkId = parseInt((req as any).params.id);
+
+    const getLogo = await fetch(`https://www.google.com/s2/favicons?domain=${link}&sz=128`);
+    const logo = getLogo?.url || "";
+
+    const updatedBookmark = await prisma.bookmark.update({where: {userId: userId, id: bookmarkId}, data: {title, description, link, logo}});
+
+    return res.status(200).json({message: "Bookmark updated successfully", bookmark: updatedBookmark});
 }
